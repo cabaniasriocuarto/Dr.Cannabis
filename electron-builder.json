@@ -1,0 +1,41 @@
+{
+  "appId": "com.ferticalc.app",
+  "productName": "FertiCalc",
+  "directories": {
+    "output": "release"
+  },
+  "files": [
+    "dist/**/*",
+    "package.json"
+  ],
+  "extraFiles": [
+    {
+      "from": "src/db/migrations",
+      "to": "resources/migrations",
+      "filter": ["**/*"]
+    }
+  ],
+  "win": {
+    "target": [
+      "nsis"
+    ],
+    "icon": "src/assets/icon.ico"
+  },
+  "nsis": {
+    "oneClick": false,
+    "allowToChangeInstallationDirectory": true,
+    "createDesktopShortcut": true
+  },
+  "mac": {
+    "target": [
+      "dmg"
+    ],
+    "icon": "src/assets/icon.icns"
+  },
+  "linux": {
+    "target": [
+      "AppImage"
+    ],
+    "icon": "src/assets/icon.png"
+  }
+}
