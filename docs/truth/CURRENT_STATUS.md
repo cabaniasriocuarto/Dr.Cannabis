@@ -13,18 +13,20 @@ No reemplaza los contratos de producto, arquitectura o dominio. Resuelve únicam
 ```text
 REPOSITORY=cabaniasriocuarto/Dr.Cannabis
 DEFAULT_BRANCH=main
-CANONICAL_MAIN=d15bcff1fcee0c97e82f92092a96e4481651dbde
 B0_MERGE=d9a74494b8532185e737970559521eb6dc17b25e
 GOV_02_PR=#52
-GOV_02_MERGE=d15bcff1fcee0c97e82f92092a96e4481651dbde
+GOV_02_BASELINE=d15bcff1fcee0c97e82f92092a96e4481651dbde
+GOV_02A_PR=#55
 ```
+
+`GOV_02_BASELINE` identifica el commit que incorporó las decisiones de GOV-02. No pretende congelar para siempre el HEAD de `main`: commits posteriores de sincronización, bloques o releases pueden avanzar la rama sin invalidar esta referencia histórica.
 
 ## 3. Estado de bloques
 
 ```text
 B0/#1=DONE
 GOV-02/#16=DONE
-GOV-02A/#54=POST_MERGE_STATUS_SYNC
+GOV-02A/#54=DONE_ON_MERGE_OF_PR_55
 B1/#2=IN_PROGRESS
 B2–B12=NOT_STARTED
 ```
@@ -63,8 +65,8 @@ Cualquier encabezado o texto heredado que todavía diga:
 queda supersedido por:
 
 1. el merge confirmado de PR #52;
-2. el commit `d15bcff1fcee0c97e82f92092a96e4481651dbde`;
-3. esta página;
+2. el baseline `d15bcff1fcee0c97e82f92092a96e4481651dbde`;
+3. esta página incorporada mediante PR #55;
 4. Issue #16 cerrada;
 5. Issue maestra #14 y tracker #46 actualizados.
 
@@ -84,10 +86,11 @@ Base original:
 main@d9a74494b8532185e737970559521eb6dc17b25e
 ```
 
-Antes de abrir o cerrar la PR de B1 debe actualizarse contra:
+Antes de abrir o cerrar la PR de B1 debe actualizarse contra el `main` más reciente que contenga, como mínimo:
 
 ```text
-main@d15bcff1fcee0c97e82f92092a96e4481651dbde
+GOV_02_BASELINE=d15bcff1fcee0c97e82f92092a96e4481651dbde
+GOV_02A_PR=#55
 ```
 
 No puede sobrescribir ni degradar:
@@ -104,11 +107,12 @@ No puede sobrescribir ni degradar:
 ### Confirmado
 
 - PR #52 mergeada;
-- workflow documental PASS;
+- workflow documental de GOV-02 PASS;
 - `git diff --check` PASS;
 - scope de GOV-02 exclusivamente de gobernanza/documentación;
 - Issue #16 cerrada;
-- master #14 y tracker #46 sincronizados.
+- master #14 y tracker #46 sincronizados;
+- PR #55 limitada a `CURRENT_STATUS.md` y `START_HERE.md`.
 
 ### No demostrado todavía
 
