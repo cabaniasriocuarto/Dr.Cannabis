@@ -120,21 +120,52 @@ Módulos previstos:
 
 ## UX MÓVIL CANÓNICA
 
-El chat no ocupa pantalla completa por defecto.
+El chat no usa pantalla completa. Tiene dos estados explícitos.
 
-### Portrait
+### Estado `EXPANDED_SPLIT`
+
+Portrait:
 
 - visor superior: 50% del área útil;
 - chat inferior: 50%.
 
-### Landscape/tablet
+Landscape/tablet:
 
 - visor izquierdo: 50%;
 - chat derecho: 50%.
 
-El split principal MVP es fijo 50/50. Ningún panel cubre al otro.
+El split expandido MVP es fijo 50/50. Ningún panel cubre al otro.
 
-### Dentro del panel de chat
+### Estado `MINIMIZED_BUBBLE`
+
+- el panel de chat deja de ocupar su mitad;
+- el visor o módulo activo ocupa todo el espacio útil;
+- queda una burbuja pequeña fija abajo a la izquierda;
+- la burbuja no es arrastrable en MVP;
+- tocarla restaura exactamente `EXPANDED_SPLIT`;
+- no existe chat full-screen.
+
+La burbuja debe:
+
+- permanecer dentro de safe areas;
+- usar 44–48 dp visuales y hit target mínimo 48 × 48 dp;
+- no tapar navegación, guardado ni controles críticos;
+- indicar generación, respuesta nueva o error sin revelar contenido sensible;
+- funcionar con TalkBack, teclado y reduced motion.
+
+Minimizar/restaurar conserva:
+
+- thread activo;
+- historial;
+- borrador;
+- mensajes y generación activa/parcial/completa;
+- artifact activo;
+- zoom, pan, scroll, filtros y orden;
+- módulo, cultivo, sector y campaña.
+
+Minimizar no pausa ni cancela silenciosamente la generación.
+
+### Dentro del panel de chat expandido
 
 - historial buscable/interactivo arriba;
 - conversación activa abajo;
@@ -143,7 +174,8 @@ El split principal MVP es fijo 50/50. Ningún panel cubre al otro.
 - preferencia persistida;
 - buscador por título/contenido/fecha/cultivo/módulo/idioma;
 - crear, renombrar, fijar, archivar y eliminar con confirmación;
-- cambiar de thread restaura borrador, mensajes, artifact, zoom y scroll.
+- cambiar de thread restaura borrador, mensajes, artifact, zoom y scroll;
+- botón minimizar accesible en el encabezado.
 
 ### Visor
 
@@ -164,11 +196,14 @@ Interacciones:
 - reset/fit;
 - tablas con scroll horizontal/vertical, headers sticky y virtualización;
 - detalle de celda;
-- estado persistente por thread/artifact.
+- estado persistente por thread/artifact;
+- uso de toda el área útil cuando el chat está minimizado.
 
-Teclado, safe areas, rotación, background/reopen no deben perder estado ni desmontar el visor.
+Teclado, minimización, restauración, safe areas, rotación y background/reopen no deben perder estado ni desmontar el visor.
 
 Contrato: `docs/product/MOBILE_SPLIT_WORKSPACE_SPEC.md`.
+Issues: #30 y #53.
+Requirements: R-015, R-030, R-031 y R-032.
 
 ## SOLVER DE FERTILIZACIÓN
 
@@ -253,6 +288,7 @@ Entidades previstas:
 - EC/pH;
 - costos/alertas;
 - chats/messages/citations/artifacts;
+- estado de presentación del chat y preferencias de layout;
 - manifests de knowledge/model/release;
 - idioma/unidades/preferences.
 
@@ -287,6 +323,7 @@ Responder preguntas libres y naturales, no un menú de preguntas precargadas.
 - tool registry;
 - providers locales;
 - orquestador/streaming/cancelación;
+- estado de presentación expandido/minimizado desacoplado del turno;
 - artifacts al visor;
 - ES/EN/PT-BR.
 
@@ -311,7 +348,8 @@ Responder preguntas libres y naturales, no un menú de preguntas precargadas.
 - abstenerse/preguntar si no hay evidencia;
 - límites técnico/educativos;
 - sin consejo médico/consumo ni asesoría legal definitiva;
-- no cloud fallback oculto.
+- no cloud fallback oculto;
+- minimizar la UI no cancela ni altera el turno.
 
 ## IA ANDROID LOCAL
 
@@ -347,6 +385,7 @@ Manejar:
 - RAM/storage/thermal;
 - background/resume;
 - streaming/cancel;
+- streaming mientras el chat está minimizado;
 - update/rollback;
 - capability detection.
 
@@ -408,7 +447,8 @@ Inputs/outputs validados, timeout/cancel/idempotencia y trace call→result→an
 - artifact/citations;
 - draft por thread;
 - migrations/versioning;
-- escala mediante virtualización.
+- escala mediante virtualización;
+- restauración exacta después de minimizar el chat.
 
 ## EVALUACIÓN DEL BOT
 
@@ -473,7 +513,7 @@ No scope expansion silenciosa. No fakes como evidencia productiva.
 ### M3/#49
 
 - B9 #10: #21–#29;
-- B10 #11: #30–#36.
+- B10 #11: #30–#36 y #53.
 
 ### M4/#50
 
@@ -493,7 +533,12 @@ Los trackers #46–#51 son hitos canónicos mientras no exista operación dispon
 - Electron security/IPC;
 - Capacitor/Kotlin bridge;
 - portrait/landscape/tablet;
-- split 50/50 e internal 30/70;
+- `expanded_split` 50/50 e internal 30/70;
+- `minimized_bubble` inferior izquierda;
+- visor full workspace al minimizar;
+- minimizar/generar/restaurar sin pérdida;
+- bubble safe areas/hit target/z-index/TalkBack;
+- ausencia de chat full-screen;
 - keyboard/safe areas/background;
 - history/search/long threads;
 - viewer gestures/large tables/images;
@@ -523,7 +568,9 @@ AAB firmado, Google Play internal/closed/staged rollout, asset delivery abstraí
 - asesoría médica/consumo;
 - control industrial autónomo;
 - soporte universal para teléfonos sin benchmark;
-- promesa de calidad equivalente a un LLM cloud general.
+- promesa de calidad equivalente a un LLM cloud general;
+- chat móvil full-screen;
+- burbuja arrastrable o ventana flotante del sistema Android en MVP.
 
 ## DEFINICIÓN DE TERMINADO
 
@@ -534,7 +581,10 @@ No declarar terminado hasta:
 - módulos completos;
 - equivalencia Windows/Android;
 - bot RAG/tools/citas/offline trilingüe;
-- split móvil/historial/visor PASS;
+- chat expandido 50/50 PASS;
+- chat minimizado como burbuja inferior izquierda y restauración exacta PASS;
+- generación minimizada/safe areas/accesibilidad PASS;
+- historial/visor PASS;
 - modelos/providers aprobados;
 - install/update/rollback/offline PASS;
 - seguridad/privacidad/licencias/SBOM;
