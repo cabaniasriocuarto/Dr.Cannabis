@@ -31,7 +31,7 @@ Si una implementación no puede indicar esta cadena, no debe declararse terminad
 | R-012 | Android sin API paga/key/PC/Wi-Fi | `ANDROID_ON_DEVICE_AI` | #10 | #25/#26 | mode-airplane/network capture |
 | R-013 | Google LiteRT-LM/Gemma por benchmark | Android AI + DECISION_LOG futuro | #10 | #25/#27 | benchmark run |
 | R-014 | No cloud fallback oculto | Android AI/AGENTS | #10 | #25/#28/#29 | network tests |
-| R-015 | Split móvil 50/50 | `MOBILE_SPLIT_WORKSPACE_SPEC` | #11 | #30 | visual geometry tests |
+| R-015 | Split móvil 50/50 en estado expandido | `MOBILE_SPLIT_WORKSPACE_SPEC` | #11 | #30 | visual geometry tests |
 | R-016 | Historial arriba/conversación abajo | mobile spec | #11 | #31/#32 | interaction tests |
 | R-017 | Visor táctil zoom/pan/tablas | mobile spec | #11 | #33 | device gesture tests |
 | R-018 | UI funcional no duplicada | cross-platform architecture | #6/#11 | #17/#34 | code reuse/import checks |
@@ -46,14 +46,24 @@ Si una implementación no puede indicar esta cadena, no debe declararse terminad
 | R-027 | RC exacto Android | testing/release | #13 | #43 | device report |
 | R-028 | Equivalencia cross-platform | cross-platform architecture | #13 | #44 | same-fixture comparison |
 | R-029 | Publicación solo con aceptación humana | workflow/WBS | #13 | #45 | signed acceptance comment |
+| R-030 | Chat minimizable a burbuja inferior izquierda y restauración sin pérdida | mobile spec | #11 | #53 | state-machine + device evidence |
+| R-031 | Visor/módulo ocupa todo el espacio al minimizar chat | mobile spec | #11 | #30/#53 | geometry + continuity tests |
+| R-032 | Generación continúa minimizada sin filtrar contenido sensible | mobile/AI contracts | #10/#11 | #29/#32/#53 | streaming/minimize integration |
 
 ## 3. Matriz de UX móvil
 
 | Requisito | Valor canónico | Issue | Prueba mínima |
 | --- | --- | --- | --- |
-| split portrait | visor 50vh + chat 50vh | #30 | pixel/geometry snapshots |
-| split landscape/tablet | visor 50vw + chat 50vw | #30 | device screenshots |
-| chat full-screen default | prohibido | #30 | navigation regression |
+| estado expandido portrait | visor 50% + chat 50% | #30 | pixel/geometry snapshots |
+| estado expandido landscape/tablet | visor 50% + chat 50% | #30 | device screenshots |
+| chat full-screen | prohibido | #30/#53 | navigation regression |
+| estado minimizado | panel oculto + burbuja inferior izquierda | #53 | visual/state test |
+| espacio al minimizar | visor/módulo usa 100% del área útil | #30/#53 | geometry snapshot |
+| burbuja | fija, safe-area, 44–48 dp visual y hit target ≥48 dp | #53 | measurement + accessibility |
+| burbuja arrastrable MVP | prohibido | #53 | interaction regression |
+| minimizar durante generación | continúa sin cancelación silenciosa | #29/#32/#53 | streaming integration |
+| badge/actividad | permitido sin contenido sensible | #53 | privacy/accessibility test |
+| restauración | mismo thread/historial/borrador/artifact/zoom/scroll | #20/#53 | lifecycle integration |
 | historial interno | arriba | #31 | component order test |
 | conversación activa | abajo | #32 | interaction test |
 | ratio interno default | 30/70 | #31 | state/default test |
@@ -61,8 +71,8 @@ Si una implementación no puede indicar esta cadena, no debe declararse terminad
 | pinch/pan/double-tap | obligatorio | #33 | gesture automation/manual evidence |
 | tabla bidireccional/sticky | obligatorio cuando aplique | #33 | large table fixture |
 | thread switch preserves state | obligatorio | #24/#31/#32/#33 | lifecycle integration |
-| keyboard preserves viewer | obligatorio | #30/#32 | IME matrix |
-| orientation preserves state | obligatorio | #20/#30/#33 | rotate test |
+| keyboard preserves viewer | obligatorio | #30/#32/#53 | IME matrix |
+| orientation preserves state | obligatorio | #20/#30/#33/#53 | rotate test |
 
 ## 4. Matriz de IA Android
 
@@ -75,6 +85,7 @@ Si una implementación no puede indicar esta cadena, no debe declararse terminad
 | capability detection | #26 | profile matrix |
 | no network inference | #25/#43 | traffic capture/mode airplane |
 | streaming/cancel | #25/#29/#32 | lifecycle tests |
+| streaming con chat minimizado | #29/#32/#53 | state-machine integration |
 | local RAG/citations | #22 | retrieval/citation metrics |
 | deterministic tools | #23 | tool-call accuracy |
 | history/search local | #24/#31 | DB/FTS/UI tests |
