@@ -1,0 +1,129 @@
+name: Release gate
+
+description: Preparar o auditar un gate B11/B12 ligado a un artifact exacto.
+title: "[RELEASE GATE] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Un dev server, mock, emulador único o build sin hash no constituye evidencia de release.
+
+  - type: input
+    id: parent
+    attributes:
+      label: Parent Issue
+      placeholder: "#12 o #13"
+    validations:
+      required: true
+
+  - type: input
+    id: block
+    attributes:
+      label: Gate/child
+      placeholder: "B11B / B12A / B12B..."
+    validations:
+      required: true
+
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Plataforma/gate
+      options:
+        - Windows installer
+        - Android APK/AAB
+        - Google Play rollout
+        - Cross-platform compatibility
+        - Final acceptance
+    validations:
+      required: true
+
+  - type: input
+    id: artifact
+    attributes:
+      label: Artifact, versión y hash
+      description: Exactamente lo que se probará/publicará. Usar `PENDING_BUILD` solo antes de producirlo.
+      placeholder: "name/version/SHA-256"
+    validations:
+      required: true
+
+  - type: textarea
+    id: versions
+    attributes:
+      label: Manifest de versiones
+      placeholder: |
+        appVersion:
+        schemaVersion:
+        knowledgeVersion:
+        embeddingVersion:
+        runtimeVersion:
+        modelVersion:
+    validations:
+      required: true
+
+  - type: textarea
+    id: prerequisites
+    attributes:
+      label: Dependencias y prerequisites
+      description: Issues/PRs/decisions/reports que deben estar completos.
+    validations:
+      required: true
+
+  - type: textarea
+    id: matrix
+    attributes:
+      label: Matriz de entornos/dispositivos
+      description: VM/OS/dispositivos/perfiles y condiciones de red/almacenamiento/thermal.
+    validations:
+      required: true
+
+  - type: textarea
+    id: gates
+    attributes:
+      label: Gates obligatorios
+      placeholder: |
+        - [ ] exact hash verified
+        - [ ] fresh install
+        - [ ] upgrade
+        - [ ] rollback
+        - [ ] offline
+        - [ ] security/privacy
+        - [ ] functional suite
+        - [ ] documentation/licenses/SBOM
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidencia requerida
+      description: Logs, videos, screenshots, reports, signatures, network captures y checksums.
+    validations:
+      required: true
+
+  - type: textarea
+    id: rollback
+    attributes:
+      label: Rollback e incidente
+      description: Cómo volver a una combinación funcional y preservar datos.
+    validations:
+      required: true
+
+  - type: textarea
+    id: limitations
+    attributes:
+      label: Known limitations y riesgos residuales
+      description: No ocultar incompatibilidades ni límites de modelo/dispositivo.
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: approval
+    attributes:
+      label: Confirmaciones
+      options:
+        - label: El gate probará el artifact exacto indicado, no un build diferente.
+          required: true
+        - label: Los requisitos de compatibilidad provienen de evidencia, no de suposiciones.
+          required: true
+        - label: No se publicará ni mergeará el RC sin aprobación humana explícita.
+          required: true
