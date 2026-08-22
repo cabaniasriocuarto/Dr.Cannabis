@@ -1,0 +1,156 @@
+name: Child task
+
+description: Crear una unidad de trabajo ejecutable vinculada a un bloque parent.
+title: "[CHILD] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Antes de completar, leé `AGENTS.md`, `docs/START_HERE.md`, el parent, WBS y contratos aplicables.
+        Una child Issue debe corresponder normalmente a una branch y una Draft PR.
+
+  - type: input
+    id: parent
+    attributes:
+      label: Parent Issue
+      description: Número y título del bloque parent, por ejemplo `#10 B9 — Dr. Cannabis IA`.
+      placeholder: "#N"
+    validations:
+      required: true
+
+  - type: input
+    id: block
+    attributes:
+      label: Identificador de bloque/child
+      description: Por ejemplo `B9E`, `B10D`, `GOV-03`.
+      placeholder: "BXA"
+    validations:
+      required: true
+
+  - type: textarea
+    id: objective
+    attributes:
+      label: Objetivo semántico único
+      description: Describí un resultado verificable; no una lista abierta de mejoras.
+      placeholder: "Implementar... para que..."
+    validations:
+      required: true
+
+  - type: input
+    id: requirements
+    attributes:
+      label: Requirement IDs
+      description: IDs de `docs/truth/TRACEABILITY_MATRIX.md`, separados por coma.
+      placeholder: "R-001, R-002"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Plataforma principal
+      options:
+        - Shared
+        - Windows
+        - Android
+        - Cross-platform
+        - Documentation/Governance
+    validations:
+      required: true
+
+  - type: dropdown
+    id: risk
+    attributes:
+      label: Riesgo
+      options:
+        - Low
+        - Medium
+        - High
+        - Critical
+    validations:
+      required: true
+
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencias y decisiones previas
+      description: Issues, PRs, datasets, manifests o decisiones que deben existir antes de iniciar.
+      placeholder: "Depende de #..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: editable
+    attributes:
+      label: Paths editables
+      description: Allowlist exacta o patrones acotados.
+      render: text
+    validations:
+      required: true
+
+  - type: textarea
+    id: readonly
+    attributes:
+      label: Paths read-only
+      render: text
+    validations:
+      required: true
+
+  - type: textarea
+    id: prohibited
+    attributes:
+      label: Paths/sistemas prohibidos
+      description: Incluir scope lateral, secrets, servicios externos y superficies no autorizadas.
+      render: text
+    validations:
+      required: true
+
+  - type: textarea
+    id: inputs
+    attributes:
+      label: Fixtures/datos autorizados
+      description: Clasificar como canonical, candidate, demo o test fixture.
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Criterios de aceptación
+      description: Usá checklist verificable.
+      placeholder: |
+        - [ ] ...
+        - [ ] ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: tests
+    attributes:
+      label: Tests, builds y evidencia obligatorios
+      placeholder: |
+        Tests:
+        Build:
+        Evidencia visual/dispositivo:
+    validations:
+      required: true
+
+  - type: textarea
+    id: outofscope
+    attributes:
+      label: Fuera de alcance
+      description: Explicitar lo que esta Issue no debe resolver.
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: readiness
+    attributes:
+      label: Readiness
+      options:
+        - label: Leí AGENTS, START_HERE, parent, WBS y contratos aplicables.
+          required: true
+        - label: El objetivo cabe en una PR coherente.
+          required: true
+        - label: No estoy promoviendo datos/modelos/requisitos sin evidencia.
+          required: true
+        - label: No iniciaré merge sin revisión y autorización humana.
+          required: true
