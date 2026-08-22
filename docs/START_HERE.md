@@ -14,17 +14,18 @@ Leer en este orden:
 4. `docs/truth/FEATURE_MAP.md`
 5. `docs/truth/NEXT_STEPS.md`
 6. `docs/truth/WORK_BREAKDOWN_STRUCTURE.md`
-7. `docs/truth/MILESTONE_PLAN.md`
-8. `docs/truth/TRACEABILITY_MATRIX.md`
-9. `docs/truth/DEVELOPMENT_WORKFLOW.md`
-10. `docs/truth/TESTING_MATRIX.md`
-11. `docs/truth/DECISION_LOG.md`
-12. `docs/architecture/CROSS_PLATFORM_ARCHITECTURE.md` si se toca estructura/UI/plataforma
-13. `docs/architecture/ANDROID_ON_DEVICE_AI.md` si se toca IA Android/modelos/assets
-14. `docs/product/MOBILE_SPLIT_WORKSPACE_SPEC.md` si se toca UX móvil/chat/visor
-15. `docs/truth/NUTRIENT_CALCULATION_CONTRACT.md` si se toca solver/PPM/EC/pH
-16. `docs/truth/AI_KNOWLEDGE_CONTRACT.md` si se toca chatbot/RAG/tools
-17. `docs/reference/LEGACY_MIGRATION_MAP.md` cuando se porte código/datos legacy
+7. `docs/truth/GITHUB_OPERATING_MODEL.md`
+8. `docs/truth/MILESTONE_PLAN.md`
+9. `docs/truth/TRACEABILITY_MATRIX.md`
+10. `docs/truth/DEVELOPMENT_WORKFLOW.md`
+11. `docs/truth/TESTING_MATRIX.md`
+12. `docs/truth/DECISION_LOG.md`
+13. `docs/architecture/CROSS_PLATFORM_ARCHITECTURE.md` si se toca estructura/UI/plataforma
+14. `docs/architecture/ANDROID_ON_DEVICE_AI.md` si se toca IA Android/modelos/assets
+15. `docs/product/MOBILE_SPLIT_WORKSPACE_SPEC.md` si se toca UX móvil/chat/visor
+16. `docs/truth/NUTRIENT_CALCULATION_CONTRACT.md` si se toca solver/PPM/EC/pH
+17. `docs/truth/AI_KNOWLEDGE_CONTRACT.md` si se toca chatbot/RAG/tools
+18. `docs/reference/LEGACY_MIGRATION_MAP.md` cuando se porte código/datos legacy
 
 ## Repositorios relacionados
 
@@ -63,9 +64,18 @@ No borrar ni reescribir el legacy hasta completar y verificar cada migración.
 - visor con zoom/pan/pinch para imágenes, tablas, gráficos y artifacts;
 - chat nunca cubre el visor.
 
+## Operación GitHub
+
+- Master: #14.
+- Parent/child Issues según WBS.
+- Formularios en `.github/ISSUE_TEMPLATE/`.
+- Toda PR usa `.github/PULL_REQUEST_TEMPLATE.md` y nace Draft.
+- Trackers #46–#51 preservan M0–M5 mientras no existan Milestones nativas gestionables.
+- No usar blank Issues para saltar contratos; seguir `GITHUB_OPERATING_MODEL.md`.
+
 ## Método de entrega
 
-El proyecto se completa por parents/child Issues, branches y Draft PRs pequeñas. La Issue maestra es #14; el WBS y los trackers #46–#51 preservan el plan completo.
+El proyecto se completa por parents/child Issues, branches y Draft PRs pequeñas. La Issue maestra es #14; el WBS y los trackers preservan el plan completo.
 
 ## Regla de oro
 
