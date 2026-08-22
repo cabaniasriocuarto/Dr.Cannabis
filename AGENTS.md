@@ -126,25 +126,53 @@ La UI debe ser funcional. Un botón no implementado se marca pendiente; no simul
 
 ## UI/UX canónica Android
 
-El chat no ocupa pantalla completa por defecto.
+El chat no usa pantalla completa. Tiene dos estados de presentación y una máquina de estados explícita.
 
-### Portrait
+### `EXPANDED_SPLIT`
+
+Portrait:
 
 - visor superior: 50% del área útil;
 - chat inferior: 50% del área útil.
 
-### Landscape/tablet
+Landscape/tablet:
 
 - visor izquierdo: 50%;
 - chat derecho: 50%.
 
-Dentro del panel de chat:
+Dentro del panel de chat expandido:
 
 - historial buscable/interactivo arriba;
 - conversación activa abajo;
 - default interno 30/70;
 - historial ajustable solo entre 25% y 45%, persistido;
-- split principal permanece 50/50.
+- split expandido permanece 50/50.
+
+### `MINIMIZED_BUBBLE`
+
+- el panel de chat deja de ocupar su mitad;
+- el visor/módulo activo usa todo el espacio útil;
+- queda una burbuja pequeña fija abajo a la izquierda;
+- la burbuja no es arrastrable en MVP;
+- tocarla restaura `EXPANDED_SPLIT`.
+
+La burbuja debe:
+
+- permanecer dentro de safe areas;
+- usar 44–48 dp visuales y hit target mínimo de 48 × 48 dp;
+- no tapar navegación, guardado ni controles críticos;
+- indicar generación/respuesta/error sin mostrar contenido sensible;
+- ser usable con TalkBack, teclado y reduced motion.
+
+Minimizar/restaurar no puede:
+
+- cambiar de thread;
+- borrar borrador;
+- cancelar silenciosamente una generación;
+- perder mensajes parciales;
+- reiniciar el modelo;
+- perder artifact, zoom, pan, scroll, filtros u orden;
+- cambiar módulo, cultivo, sector o campaña.
 
 Visor:
 
@@ -152,9 +180,12 @@ Visor:
 - imágenes, tablas, gráficos, artifacts y fuentes;
 - tablas con scroll bidireccional/headers sticky/virtualización cuando corresponda;
 - estado por thread/artifact;
-- el chat nunca cubre el visor.
+- cuando el chat está expandido nunca cubre el visor;
+- cuando el chat está minimizado utiliza todo el espacio útil.
 
-Teclado, rotación y background no deben perder thread, borrador, artifact, zoom o scroll.
+Teclado, minimización, restauración, rotación y background no deben perder thread, borrador, artifact, zoom o scroll.
+
+Issues: #30 y #53. Requirements: R-015, R-030, R-031 y R-032.
 
 ## Chatbot Dr. Cannabis
 
@@ -217,6 +248,9 @@ Cuando aplique:
 - Electron security/IPC;
 - Android bridge/lifecycle/background/low-memory;
 - portrait/landscape/tablet;
+- `expanded_split ↔ minimized_bubble`;
+- generación activa minimizada y restauración exacta;
+- bubble safe-area/hit-target/z-index;
 - teclado/safe areas/touch/accessibility;
 - RAG/citations/tools/abstention;
 - ES/EN/PT-BR;
