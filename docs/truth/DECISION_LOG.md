@@ -84,20 +84,22 @@ Toolboxes, UI y chatbot consumen resultados del dominio; no duplican fórmulas.
 
 **Contrato:** `docs/architecture/CROSS_PLATFORM_ARCHITECTURE.md`.
 
-## D-016 — Workspace móvil fijo 50/50
+## D-016 — Workspace móvil 50/50 en estado expandido
 
-**Decisión:** el chat móvil no ocupa pantalla completa por defecto.
+**Decisión original:** el chat móvil no ocupa pantalla completa y, durante el uso expandido:
 
 - portrait: visor arriba 50% y chat abajo 50%;
 - landscape/tablet: visor izquierda 50% y chat derecha 50%;
-- el chat nunca cubre ni reemplaza el visor durante el flujo normal;
-- el split principal MVP es fijo 50/50.
+- el chat no cubre ni reemplaza el visor;
+- el split expandido MVP es fijo 50/50.
+
+**Estado:** `AMENDED_BY_D-032`. El 50/50 sigue siendo obligatorio cuando el chat está expandido, pero el usuario puede minimizarlo a una burbuja inferior izquierda.
 
 **Contrato:** `docs/product/MOBILE_SPLIT_WORKSPACE_SPEC.md`.
 
 ## D-017 — Historial arriba y conversación abajo dentro del panel de chat
 
-**Decisión:** dentro del 50% asignado al chat:
+**Decisión:** dentro del 50% asignado al chat expandido:
 
 - historial buscable/interactivo arriba;
 - conversación activa abajo;
@@ -107,9 +109,9 @@ Toolboxes, UI y chatbot consumen resultados del dominio; no duplican fórmulas.
 
 ## D-018 — Visor móvil de artifacts táctil e independiente
 
-**Decisión:** la otra mitad de la pantalla funciona como visor/workspace para imágenes, tablas, gráficos, recetas, resultados, documentos y citas.
+**Decisión:** la otra mitad de la pantalla expandida funciona como visor/workspace para imágenes, tablas, gráficos, recetas, resultados, documentos y citas.
 
-Requiere pinch-to-zoom, pan, double-tap, reset/fit, tablas bidireccionales y estado persistente por thread/artifact.
+Requiere pinch-to-zoom, pan, double-tap, reset/fit, tablas bidireccionales y estado persistente por thread/artifact. Cuando el chat se minimiza, el visor utiliza todo el espacio útil sin perder su estado.
 
 ## D-019 — Conversación natural, no preguntas precargadas
 
@@ -173,7 +175,7 @@ Updates deben ser verificables, recuperables y con rollback. Un asset corrupto/i
 
 ## D-029 — Jerarquía parent/child y trazabilidad
 
-**Decisión:** #14 es el master. Parents #6/#10/#11/#12/#13 consolidan gates y child issues #17–#45 ejecutan objetivos coherentes.
+**Decisión:** #14 es el master. Parents #6/#10/#11/#12/#13 consolidan gates y child issues ejecutan objetivos coherentes.
 
 Cada cambio debe rastrear Requirement → Contract → Parent → Child → Test/Evidence → Release Gate.
 
@@ -188,3 +190,28 @@ Sus nombres y alcance son estables y se migrarán a Milestones nativas sin cambi
 ## D-031 — iOS fuera del roadmap actual
 
 **Decisión:** B0–B12 cubren Windows y Android. iOS queda fuera de alcance hasta una decisión/roadmap independiente, evitando promesas y complejidad no planificada.
+
+## D-032 — Chat móvil minimizable a burbuja inferior izquierda
+
+**Decisión:** el chat móvil tiene exactamente dos estados de presentación:
+
+1. `EXPANDED_SPLIT`: usa el split canónico 50/50 de D-016.
+2. `MINIMIZED_BUBBLE`: el panel de chat desaparece del layout, el visor/módulo activo utiliza todo el espacio útil y queda una burbuja pequeña fija abajo a la izquierda.
+
+**Restauración:** tocar la burbuja vuelve a `EXPANDED_SPLIT` conservando el mismo thread, historial, borrador, artifact, zoom, pan, scroll, filtros, módulo, cultivo y generación.
+
+**Generación:** minimizar no cancela ni pausa silenciosamente una respuesta. La burbuja puede indicar actividad, respuesta nueva o error, pero no muestra contenido sensible.
+
+**Accesibilidad y geometría:**
+
+- burbuja dentro de safe areas;
+- 44–48 dp visual y hit target mínimo de 48 × 48 dp;
+- posición fija, no arrastrable en MVP;
+- no tapa navegación ni controles críticos;
+- TalkBack/teclado/reduced-motion obligatorios.
+
+**Prohibido:** chat full-screen, burbuja del sistema Android, múltiples burbujas o restauración que reinicie el estado.
+
+**Issues:** #30 y #53.
+
+**Requisitos:** R-030, R-031 y R-032.
