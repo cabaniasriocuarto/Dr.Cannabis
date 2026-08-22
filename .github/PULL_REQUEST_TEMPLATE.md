@@ -28,11 +28,11 @@ PROHIBITED_PATHS=
 
 ### Archivos modificados
 
-- 
+- <!-- path -->
 
 ### Fuera de alcance preservado
 
-- 
+- <!-- superficie o path -->
 
 ## Decisiones/contratos leídos
 
@@ -127,11 +127,11 @@ No declarar PASS para comandos no ejecutados.
 
 ## Riesgos y known limitations
 
-- 
+- <!-- riesgo o limitación -->
 
 ## Acceptance checklist de la Child Issue
 
-- [ ] 
+- [ ] <!-- criterio -->
 
 ## Review requerido
 
