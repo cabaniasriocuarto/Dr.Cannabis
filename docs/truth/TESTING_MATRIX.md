@@ -90,7 +90,7 @@
 | Permissions | mínimos/contextuales/denied | PASS #19 |
 | Lifecycle | pause/resume/background/process recreation | PASS #19/#20 |
 | Back navigation | route/thread/artifact coherentes | PASS #20 |
-| Orientation | portrait↔landscape sin pérdida | PASS #20/#30 |
+| Orientation | portrait↔landscape sin pérdida | PASS #20/#30/#53 |
 | Low-memory | callback/release/recovery | PASS #25/#35 |
 | Thermal | warning/degraded/recovery | PASS #25/#35 |
 | AAB | signed/validated/installable | PASS #38 |
@@ -105,27 +105,46 @@
 | Import boundaries | no platform imports en domain/UI | PASS #17 |
 | Route map | rutas válidas/inválidas/deep link | PASS #20 |
 | Workspace restore | module/thread/artifact/draft | PASS #20 |
+| Chat presentation restore | expanded/minimized + state | PASS #20/#53 |
 | Fertilizer UI | input→solve→save→artifact | PASS #7 |
 | Normal/loading/empty/error | cada feature crítica | PASS B10 |
 | Degraded | model/DB/tool unavailable | PASS B9/B10 |
 | Desktop responsive | ventana mínima razonable | PASS #11 |
 | Cross-platform input/output | misma fixture/journey | PASS #34/#44 |
 
-## 8. UX móvil split 50/50
+## 8. UX móvil: chat expandido y minimizado
 
 | Superficie | Prueba | Gate |
 | --- | --- | --- |
-| Portrait geometry | visor 50vh + chat 50vh | PASS #30 |
-| Landscape geometry | visor 50vw + chat 50vw | PASS #30 |
-| Tablet geometry | 50/50 según spec | PASS #30 |
-| No chat fullscreen | chat no reemplaza/cubre visor | PASS #30 |
-| Independent scroll | visor/chat no se arrastran mutuamente | PASS #30 |
-| Safe areas | notch/status/nav bars | PASS #30/#35 |
-| Keyboard open | composer visible, viewer preserved | PASS #30/#32 |
-| Keyboard close | geometry restored no jump | PASS #30/#32 |
-| Rotation | thread/artifact/zoom/draft preserved | PASS #30/#33 |
-| Background/reopen | workspace restored | PASS #20/#30 |
-| Tiny viewport | defined fallback, no overlay chaos | PASS #30 |
+| Expanded portrait geometry | visor 50% + chat 50% | PASS #30 |
+| Expanded landscape geometry | visor 50% + chat 50% | PASS #30 |
+| Expanded tablet geometry | 50/50 según spec | PASS #30 |
+| No chat fullscreen | chat nunca reemplaza toda la pantalla | PASS #30/#53 |
+| Minimize action | botón explícito desde header | PASS #53 |
+| Minimized geometry | panel ausente + visor/módulo 100% área útil | PASS #30/#53 |
+| Bubble position | fija abajo a la izquierda | PASS #53 |
+| Bubble safe area | respeta left/bottom insets | PASS #35/#53 |
+| Bubble dimensions | 44–48 dp visual, hit target ≥48 dp | PASS #35/#53 |
+| Bubble z-index | no tapa navegación/guardar/controles críticos | PASS #35/#53 |
+| Bubble non-draggable MVP | no puede desplazarse | PASS #53 |
+| Restore action | tap/click/keyboard restaura split | PASS #53 |
+| Restore state | mismo thread/history/draft/artifact/zoom/scroll | PASS #20/#53 |
+| Generation minimized | continúa sin cancelación ni pérdida | PASS #29/#32/#53 |
+| New-response badge | visible sin contenido sensible | PASS #53 |
+| Error badge | accesible y no revela contenido | PASS #53 |
+| Independent scroll | visor/chat no se arrastran mutuamente cuando expandido | PASS #30 |
+| Safe areas | notch/status/nav bars | PASS #30/#35/#53 |
+| Keyboard open expanded | composer visible, viewer preserved | PASS #30/#32 |
+| Minimize with keyboard | teclado cierra, estado persiste | PASS #53 |
+| Keyboard close | geometry restored no jump | PASS #30/#32/#53 |
+| Rotation expanded | thread/artifact/zoom/draft preserved | PASS #30/#33 |
+| Rotation minimized | burbuja sigue dentro de safe area | PASS #53 |
+| Background/reopen | presentation/workspace restored | PASS #20/#30/#53 |
+| Corrupt presentation state | fallback expanded sin perder thread | PASS #53 |
+| Back expanded | teclado primero; luego política de minimizar | PASS #20/#53 |
+| Back minimized | navegación normal, no reabre chat | PASS #20/#53 |
+| Reduced motion | transición accesible | PASS #35/#53 |
+| Tiny viewport | defined fallback, no overlay chaos | PASS #30/#53 |
 
 ## 9. Historial y conversación
 
@@ -133,7 +152,7 @@
 | --- | --- | --- |
 | Internal default | history 30%, conversation 70% | PASS #31 |
 | Divider bounds | history 25–45% only | PASS #31 |
-| Divider persistence | restore per device | PASS #31 |
+| Divider persistence | restore per device | PASS #31/#53 |
 | Search | title/content/date/crop/module/language | PASS #24/#31 |
 | Scale | 1,000+ threads virtualized | PASS #31 |
 | CRUD | new/rename/pin/archive/delete/restore | PASS #24/#31 |
@@ -141,6 +160,7 @@
 | Rapid switching | no state leakage/lost generation | PASS #31 |
 | Long conversation | virtualization/scroll anchor | PASS #32 |
 | Streaming | incremental/complete/partial | PASS #29/#32 |
+| Streaming minimized | incremental state persists while hidden | PASS #29/#32/#53 |
 | Cancel/retry | no duplicate turn/resources | PASS #29/#32 |
 | IME/multiline | composer usable | PASS #32/#35 |
 | Citation action | opens exact viewer content | PASS #32/#33 |
@@ -160,6 +180,7 @@
 | Cell detail | opens without losing position | PASS #33 |
 | Chart | tooltip/legend/units/accessible table | PASS #33 |
 | Artifact linkage | thread/message/tool/citation exact | PASS #21/#33 |
+| Minimize/restore | artifact/zoom/pan/scroll unchanged | PASS #33/#53 |
 | Rotation/background | zoom/pan/scroll preserved | PASS #33 |
 | Untrusted content | no script/unsafe HTML execution | PASS security |
 
@@ -190,6 +211,7 @@
 | Idempotent retry | no duplicate mutation | PASS #23/#29 |
 | Result trace | call→result→answer/artifact | PASS #23 |
 | Calculation source | result from domain, not LLM | PASS regression |
+| Tool result while minimized | artifact/chat state consistent | PASS #23/#29/#53 |
 
 ## 13. Providers y Android on-device AI
 
@@ -202,6 +224,7 @@
 | License/provenance | complete before release | PASS #26/#41 |
 | Load/unload | success/fail/release memory | PASS #25 |
 | Streaming | deltas/order/completion | PASS #25 |
+| Streaming minimized | provider continues; UI state remains coherent | PASS #25/#29/#53 |
 | Cancellation | prompt/tool/runtime abort | PASS #25/#29 |
 | Concurrency | one active or documented queue | PASS #25 |
 | Background/resume | coherent recovery | PASS #25 |
@@ -240,12 +263,14 @@ No elegir ganador antes de escribir umbrales y corpus versionado.
 | ES/EN/PT-BR | critical journeys | PASS #36 |
 | Hard-coded strings | audit | PASS #36 |
 | Dates/numbers/units | locale correctness | PASS #36 |
-| Pseudo-locale | overflow/split stability | PASS #36 |
+| Pseudo-locale | overflow/split/bubble stability | PASS #36/#53 |
 | Text scale | mobile/desktop | PASS #35/#36 |
 | Touch targets | minimum design token | PASS #35 |
+| Bubble accessible name/state | TalkBack + keyboard | PASS #35/#53 |
 | Focus/TalkBack | critical flows | PASS #35 |
 | Gesture alternative | zoom/pan controls | PASS #33/#35 |
 | Contrast/status | accessibility checklist | PASS #35 |
+| Reduced motion | minimize/restore transition | PASS #35/#53 |
 
 ## 16. Distribución, actualización y rollback
 
@@ -270,7 +295,7 @@ No elegir ganador antes de escribir umbrales y corpus versionado.
 | Exact hash | required | required | reports both |
 | Domain/solver | PASS | PASS | equivalent |
 | DB/migrations | PASS | PASS | compatible |
-| UI journeys | PASS | PASS | same semantics |
+| UI journeys | PASS | PASS incl. expanded/minimized chat | same semantics |
 | Chat/RAG/tools | PASS | PASS | contract compatible |
 | Offline | PASS | PASS | declared behavior |
 | Security | Electron | Android bridge/assets | schemas/versioning |
@@ -287,6 +312,7 @@ No elegir ganador antes de escribir umbrales y corpus versionado.
 - DB fixtures por schema version;
 - cultivos `TEST_FIXTURE_ONLY`;
 - threads/messages/citations/artifacts;
+- chat presentation states expanded/minimized/restoring;
 - knowledge corpus versionado;
 - model evaluation corpus;
 - device profile manifest;
