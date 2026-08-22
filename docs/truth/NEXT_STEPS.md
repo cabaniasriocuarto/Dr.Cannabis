@@ -39,9 +39,12 @@ Salida esperada:
 - Electron/Windows + Capacitor/Android;
 - Kotlin solo como bridge nativo;
 - contrato Google LiteRT-LM/Gemma pendiente de benchmark;
-- UX móvil 50/50, historial arriba, conversación abajo y visor táctil;
+- chat móvil con estados `expanded_split` y `minimized_bubble`;
+- expandido 50/50, historial arriba, conversación abajo y visor táctil;
+- minimizado como burbuja fija abajo a la izquierda y visor full workspace;
+- restauración sin pérdida y generación minimizada;
 - WBS, traceability, milestone plan;
-- child issues #17–#45 y trackers #46–#51;
+- child issues #17–#45 y #53, trackers #46–#51;
 - truth/source prompt sincronizados.
 
 No toca código productivo ni altera B1.
@@ -106,7 +109,7 @@ Child issues:
 - #17 arquitectura/workspaces/import boundaries;
 - #18 Electron seguro + layout desktop;
 - #19 Android Capacitor + bridge tipado;
-- #20 navegación/estado/rutas compartidos.
+- #20 navegación/estado/rutas compartidos, incluyendo `chatPresentation`.
 
 Orden recomendado:
 
@@ -121,7 +124,7 @@ Gates:
 - Electron `contextIsolation=true`, `nodeIntegration=false`;
 - Android shell offline sin PC/Wi-Fi/API key;
 - build desktop + Android debug;
-- continuidad de workspace.
+- continuidad de workspace y estado de presentación.
 
 ## B6 — Fertilizer Calculator UI end-to-end (#7)
 
@@ -179,7 +182,7 @@ Child issues:
 - #26 model manifest/assets/compatibilidad;
 - #27 benchmark/evaluación;
 - #28 provider desktop local;
-- #29 orquestador/streaming/cancelación/degradados.
+- #29 orquestador/streaming/cancelación/degradados y presentación desacoplada.
 
 Orden recomendado:
 
@@ -201,33 +204,51 @@ Reglas:
 - Gemma solo candidata hasta benchmark;
 - desktop provider desacoplado;
 - no cloud fallback oculto;
-- offline después de assets.
+- offline después de assets;
+- minimizar UI no cancela ni duplica el turno.
 
 ## B10 — UX cross-platform e integración (#11)
 
 Child issues:
 
-- #30 workspace móvil split 50/50;
+- #30 workspace expandido 50/50 y transición de presentación;
 - #31 historial buscable dentro del chat;
 - #32 conversación/composer/streaming;
 - #33 visor táctil;
 - #34 componentes compartidos;
 - #35 accesibilidad/performance móvil;
-- #36 i18n/regresión visual.
+- #36 i18n/regresión visual;
+- #53 minimizar/restaurar chat como burbuja inferior izquierda.
 
 Orden recomendado:
 
 ```text
-#34 → #30 → #31/#32/#33 → #35 → #36 → parent gate
+#34 → #30 → #31/#32/#33 → #53 → #35 → #36 → parent gate
 ```
 
 UX canónica:
 
-- portrait: visor superior 50%, chat inferior 50%;
-- landscape/tablet: visor izquierda 50%, chat derecha 50%;
-- historial arriba, conversación abajo;
-- default interno 30/70, historial 25–45%;
-- visor con pinch/pan/double-tap/tablas/artifacts;
+```text
+EXPANDED_SPLIT
+  portrait: visor superior 50%, chat inferior 50%
+  landscape/tablet: visor izquierda 50%, chat derecha 50%
+  chat: historial arriba, conversación abajo
+  default interno 30/70, historial 25–45%
+
+MINIMIZED_BUBBLE
+  panel de chat fuera del layout
+  visor/módulo usa 100% del espacio útil
+  burbuja pequeña fija abajo a la izquierda
+  restore exacto del split y estado
+```
+
+Requisitos adicionales:
+
+- no chat full-screen;
+- minimizar no cancela generación;
+- badge sin contenido sensible;
+- thread, borrador, artifact, zoom y scroll persisten;
+- safe areas, hit target, TalkBack y reduced motion;
 - teclado/orientación/background preservan estado.
 
 # M4 — Distribution & Stores (#50)
@@ -259,7 +280,7 @@ Gates:
 Child issues:
 
 - #42 RC Desktop;
-- #43 RC Android/device matrix;
+- #43 RC Android/device matrix, incluyendo expand/minimize/restore;
 - #44 equivalencia de datos/knowledge/contratos;
 - #45 aceptación final/publicación controlada.
 
