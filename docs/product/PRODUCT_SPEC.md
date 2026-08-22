@@ -1,129 +1,259 @@
 # PRODUCT SPEC — Dr. Cannabis · Fertilizer-IA
 
 ## Visión
-Aplicación profesional, local-first y offline para formular soluciones de fertirriego de cannabis con PPM/EC/pH, administrar datos del cultivo y ofrecer asistencia agronómica contextual.
 
-## Usuario objetivo
-- cultivador doméstico avanzado;
-- operador de indoor/invernadero pequeño o mediano;
-- usuario que quiere formular con sales individuales y mantener trazabilidad de recetas, lecturas y costos.
+Aplicación profesional local-first/offline para Windows y Android que formula soluciones de fertirriego con PPM/EC/pH, administra datos técnicos y ofrece asistencia contextual en lenguaje natural.
+
+La pieza central es el Fertilizer Calculator. La IA interpreta datos y usa herramientas; no sustituye el motor de cálculo.
+
+## Principios
+
+- una sola base funcional React + TypeScript;
+- dominio/solver compartidos;
+- Electron para Windows;
+- Capacitor para Android;
+- Kotlin solo como puente nativo;
+- SQLite local;
+- conversación natural, no preguntas precargadas;
+- datos y fuentes visibles;
+- sin API paga, API key, PC o Wi-Fi local como requisito para Android;
+- offline después de instalar los assets requeridos;
+- no fallback cloud oculto.
 
 ## Flujo principal
-1. Crear/seleccionar sector y campaña/cultivo.
-2. Elegir fase fenológica y sistema de cultivo.
-3. Cargar/usar objetivos PPM y EC desde dataset canónico.
-4. Seleccionar sales/productos disponibles y lotes/purezas.
-5. Definir volumen de tanque.
+
+1. Crear/seleccionar sector y campaña.
+2. Elegir fase y sistema.
+3. Usar objetivos PPM/EC canónicos.
+4. Seleccionar sales/lotes/purezas.
+5. Definir volumen y agua base.
 6. Ejecutar solver.
-7. Revisar gramos, PPM logrados, desviaciones, EC estimada, costo y advertencias.
-8. Medir EC/pH reales y registrar riego/drenaje.
+7. Revisar gramos, aportes, desvíos, EC estimada, costo y alertas.
+8. Registrar EC/pH/riego/drenaje.
 9. Guardar formulación e historial.
-10. Consultar al bot con el contexto actual.
+10. Consultar al bot con contexto actual.
+11. Abrir imágenes, tablas, gráficos, resultados y fuentes en el visor.
+12. Minimizar el chat cuando se necesite el visor completo y restaurarlo sin perder estado.
 
-## Navegación desktop
-### Izquierda
-- Dr. Cannabis – Fertilizer-IA.
-- Fertilizer Calculator.
-- CFM Calculator.
-- Harvest Timer.
-- Costos / Historial.
-- VPD Calculator.
-- pH Tracker.
-- Feeding Calculator.
-- Soil Mix Calculator.
-- Yield Estimator.
-- Green Light.
-- Configuración / Inventario.
+## Plataformas
 
-### Centro
-Área dinámica del módulo activo.
+### Windows
 
-### Derecha
-Chatbot Dr. Cannabis persistente, con acceso al contexto del módulo/cultivo activo.
+- Electron;
+- UI desktop de tres zonas;
+- SQLite local;
+- provider LLM local desacoplado;
+- instalador NSIS;
+- usuario final sin Node/VS Code.
 
-## Fertilizer Calculator — requisitos mínimos
-Inputs:
-- fase fenológica;
-- sistema: tierra/coco/hidro;
-- volumen L;
+### Android
+
+- UI React/TypeScript compartida;
+- Capacitor;
+- plugin Kotlin tipado;
+- Google LiteRT-LM;
+- familia Gemma como candidata sujeta a benchmark;
+- signed AAB/Google Play;
+- uso offline posterior a instalación.
+
+## UX desktop
+
+1. izquierda: navegación;
+2. centro: módulo/visor;
+3. derecha: chat persistente.
+
+## UX Android canónica
+
+El chat no usa pantalla completa. Tiene dos estados de presentación.
+
+### Estado expandido: `EXPANDED_SPLIT`
+
+- portrait: visor arriba 50%, chat abajo 50%;
+- landscape/tablet: visor izquierda 50%, chat derecha 50%;
+- ratio expandido MVP fijo 50/50;
+- el chat no reemplaza ni cubre el visor.
+
+### Estado minimizado: `MINIMIZED_BUBBLE`
+
+- el panel de chat desaparece del layout;
+- el visor o módulo activo ocupa todo el espacio útil;
+- queda una burbuja pequeña fija abajo a la izquierda;
+- la burbuja no es arrastrable en MVP;
+- tocarla restaura exactamente el estado expandido.
+
+La transición minimizar/restaurar conserva:
+
+- thread activo;
+- historial;
+- borrador;
+- mensajes y generación;
+- artifact activo;
+- zoom, pan y scroll;
+- filtros/orden;
+- módulo, cultivo, sector y campaña.
+
+Minimizar no cancela ni pausa silenciosamente una generación. La burbuja puede indicar actividad, respuesta nueva o error sin mostrar contenido sensible.
+
+Requisitos de la burbuja:
+
+- esquina inferior izquierda dentro de safe areas;
+- 44–48 dp visuales;
+- hit target mínimo 48 × 48 dp;
+- no tapa navegación ni controles críticos;
+- accesible mediante TalkBack, teclado y reduced motion.
+
+### Panel de chat expandido
+
+- historial buscable/interactivo arriba;
+- conversación activa abajo;
+- default interno 30/70;
+- historial ajustable entre 25% y 45%;
+- búsqueda por título, contenido, fecha, sector/campaña, módulo e idioma;
+- crear, renombrar, fijar, archivar y eliminar con confirmación;
+- cambiar hilo restaura borrador, conversación y artifact;
+- botón minimizar visible en el encabezado.
+
+### Visor
+
+Soporta imágenes, tablas, gráficos, recetas, resultados, documentos y citas.
+
+Interacciones:
+
+- pinch-to-zoom;
+- pan;
+- double-tap;
+- reset/fit;
+- tablas con scroll en ambos ejes y headers sticky;
+- detalle de celda;
+- preservación de zoom, scroll, filtros y artifact;
+- uso de toda el área útil cuando el chat está minimizado.
+
+## Fertilizer Calculator
+
+### Inputs
+
+- fase;
+- sistema tierra/coco/hidro;
+- volumen;
 - objetivos por nutriente/ion;
 - EC objetivo;
-- agua base cuando corresponda;
-- sales/lotes habilitados;
+- agua base;
+- productos/lotes;
 - pureza/composición;
-- tolerancias.
+- tolerancias/restricciones.
 
-Outputs:
-- gramos por sal y g/L;
-- aporte por nutriente/ion de cada sal;
-- PPM objetivo vs logrado;
-- desviación absoluta y porcentual;
-- EC estimada con etiqueta de modelo;
-- costo de la solución;
-- alertas de incompatibilidad/antagonismo relevantes;
-- orden de mezcla/tanques A/B cuando aplique;
-- opción guardar/exportar.
+### Outputs
 
-## Datos e historial
-- sales/productos;
-- composición y pureza;
-- lotes/stock/costo;
-- sectores;
-- campañas;
-- objetivos por fase;
-- formulaciones;
-- formulaciones por sal;
-- resultados por ion;
-- lecturas de riego/drenaje;
-- pH/EC;
-- costos;
-- alertas;
-- configuraciones de idioma/unidades.
+- gramos y g/L por producto;
+- aportes por nutriente/ion;
+- objetivo vs logrado;
+- desviaciones;
+- EC estimada etiquetada;
+- costo/stock/lote;
+- alertas y orden de mezcla;
+- guardar/exportar;
+- artifacts para el visor.
+
+## Datos
+
+- productos/composición/pureza/lotes/stock/precios;
+- sectores/campañas/targets;
+- formulaciones/resultados;
+- lecturas EC/pH/riego/drenaje;
+- costos/alertas;
+- chats/messages/citations/artifacts;
+- estado de presentación del chat y preferencias de layout;
+- idioma/unidades/preferences;
+- manifests de knowledge/model/release.
 
 ## Toolboxes
-### VPD
-Entrada: T aire, T hoja, HR, etapa. Salida: kPa, rango/estado y acción sugerida.
 
-### CFM
-Entrada: dimensiones, unidades, recambio, filtro, luces/ductos/carga térmica. Salida: CFM y m³/h recomendados con factores desglosados.
+- VPD;
+- CFM;
+- Harvest Timer;
+- pH Tracker;
+- Feeding Calculator reutilizando solver;
+- Soil Mix;
+- Yield Estimator;
+- Green Light.
 
-### Harvest Timer
-Fechas de inicio/cambio a 12/12 + duración estimada; timer orientativo, nunca sustituye observación de madurez.
+Cada toolbox produce resultado estructurado y artifact visual cuando corresponde.
 
-### pH Tracker
-Histórico de entrada/drenaje, tendencias y alertas.
+## Dr. Cannabis IA
 
-### Feeding Calculator
-Vista simplificada del plan de alimentación, reutilizando el mismo motor/datos del solver.
+Capacidades:
 
-### Soil Mix
-Proporciones y cantidades de componentes según volumen final.
+- conversación natural;
+- contexto actual;
+- RAG exacto + semántico;
+- citations;
+- tools deterministas;
+- historial/search local;
+- streaming/cancelación;
+- streaming coherente con chat minimizado;
+- ES/EN/PT-BR;
+- artifacts al visor.
 
-### Yield Estimator
-Estimación orientativa separada de cualquier promesa de rendimiento.
+Orden de fuentes:
 
-### Green Light
-Ayuda contextual/recordatorio; no requiere un motor complejo en MVP salvo integración hardware futura.
+1. contexto actual;
+2. datos canónicos locales;
+3. prompt maestro;
+4. knowledge local;
+5. fallback genérico explícito.
 
-## Bot
-- contexto: cultivo activo, fase, sistema, objetivos, receta, lecturas, historial relevante y toolbox activo;
-- conocimiento local versionado;
-- respuestas ES/EN/PT-BR;
-- breve primero;
-- datos de app > rangos genéricos;
-- debe reconocer datos faltantes y pedir solo lo necesario.
+Reglas:
+
+- no inventar datos o resultados de tools;
+- cálculos mediante dominio;
+- read-only por defecto y mutaciones confirmadas;
+- sin modificación autónoma de BD;
+- límites técnico/educativos;
+- privacidad local por defecto.
+
+## Experiencia Android IA
+
+```text
+instalar → abrir → preparar assets automáticamente si aplica → chatear
+```
+
+El usuario no elige modelo, runtime, cuantización, archivo o API key.
+
+Si existe incompatibilidad, falta de espacio o actualización pendiente, la app muestra un estado simple y accionable. Los demás módulos siguen disponibles cuando sea seguro.
 
 ## Distribución
-- Windows como primera plataforma de release;
-- instalador NSIS;
-- usuario final no instala Node, npm ni VS Code;
-- datos locales en directorio de usuario;
-- backup/export explícito;
-- futura extensión macOS/Linux/PWA posible, sin bloquear MVP Windows.
 
-## Fuera de alcance inicial
-- asesoría médica o de consumo;
-- marketplace/venta de cannabis;
-- control industrial automático de bombas/dosificadores;
-- dependencia obligatoria de internet;
-- sincronización cloud obligatoria.
+### Windows
+
+NSIS reproducible, install/upgrade/uninstall/offline, manifest/hashes/SBOM/licencias y plan de firma.
+
+### Android
+
+AAB firmado, Google Play internal/closed/staged rollout, model assets versionados, requisitos desde benchmark, privacidad/licencias y rollback.
+
+## Fuera de alcance actual
+
+- iOS dentro de B0–B12;
+- nube obligatoria;
+- sincronización cloud obligatoria;
+- control industrial autónomo;
+- soporte universal para dispositivos sin benchmark;
+- IA general equivalente a un servicio cloud de propósito general;
+- chat móvil full-screen;
+- burbuja arrastrable o ventana flotante del sistema Android en MVP.
+
+## Definición de terminado
+
+- solver/datos/migraciones PASS;
+- módulos completos;
+- equivalencia Windows/Android;
+- bot RAG/tools/citas/offline trilingüe;
+- chat expandido 50/50 PASS;
+- chat minimizado como burbuja inferior izquierda y restauración exacta PASS;
+- generación minimizada, safe areas y accesibilidad PASS;
+- historial/visor PASS;
+- providers/modelos aprobados por benchmark;
+- instalación/update/rollback PASS;
+- seguridad/privacidad/licencias;
+- documentación/release notes;
+- aceptación humana final.

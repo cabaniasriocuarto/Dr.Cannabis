@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Roadmap maestro
+    url: https://github.com/cabaniasriocuarto/Dr.Cannabis/issues/14
+    about: Revisá el roadmap, parents, child Issues y milestone trackers antes de abrir trabajo nuevo.
+  - name: Governance y arquitectura multiplataforma
+    url: https://github.com/cabaniasriocuarto/Dr.Cannabis/issues/16
+    about: Consultá las decisiones de arquitectura, IA local y UX móvil antes de proponer cambios relacionados.

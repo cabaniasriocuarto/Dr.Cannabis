@@ -1,31 +1,82 @@
 # START HERE — Dr. Cannabis
 
 ## Propósito
-Este repositorio es el canónico para convertir Dr. Cannabis en una aplicación de escritorio seria, verificable, mantenible y distribuible.
+
+Este repositorio es el canónico para convertir Dr. Cannabis en una aplicación profesional multiplataforma, verificable, mantenible, local-first/offline y distribuible para Windows y Android.
 
 ## Antes de trabajar
+
 Leer en este orden:
+
 1. `AGENTS.md`
 2. `docs/truth/SOURCE_OF_TRUTH.md`
 3. `docs/product/PRODUCT_SPEC.md`
 4. `docs/truth/FEATURE_MAP.md`
 5. `docs/truth/NEXT_STEPS.md`
-6. `docs/truth/DEVELOPMENT_WORKFLOW.md`
-7. `docs/truth/TESTING_MATRIX.md`
-8. `docs/truth/NUTRIENT_CALCULATION_CONTRACT.md` si se toca el solver
-9. `docs/truth/AI_KNOWLEDGE_CONTRACT.md` si se toca el chatbot
-10. `docs/truth/DECISION_LOG.md`
-11. `docs/reference/LEGACY_MIGRATION_MAP.md` cuando se porte código/datos antiguos
+6. `docs/truth/WORK_BREAKDOWN_STRUCTURE.md`
+7. `docs/truth/GITHUB_OPERATING_MODEL.md`
+8. `docs/truth/MILESTONE_PLAN.md`
+9. `docs/truth/TRACEABILITY_MATRIX.md`
+10. `docs/truth/DEVELOPMENT_WORKFLOW.md`
+11. `docs/truth/TESTING_MATRIX.md`
+12. `docs/truth/DECISION_LOG.md`
+13. `docs/architecture/CROSS_PLATFORM_ARCHITECTURE.md` si se toca estructura/UI/plataforma
+14. `docs/architecture/ANDROID_ON_DEVICE_AI.md` si se toca IA Android/modelos/assets
+15. `docs/product/MOBILE_SPLIT_WORKSPACE_SPEC.md` si se toca UX móvil/chat/visor
+16. `docs/truth/NUTRIENT_CALCULATION_CONTRACT.md` si se toca solver/PPM/EC/pH
+17. `docs/truth/AI_KNOWLEDGE_CONTRACT.md` si se toca chatbot/RAG/tools
+18. `docs/reference/LEGACY_MIGRATION_MAP.md` cuando se porte código/datos legacy
 
 ## Repositorios relacionados
-- Canónico: `cabaniasriocuarto/Dr.Cannabis`
-- Legacy funcional: `cabaniasriocuarto/Dr.-Cannabis`
 
-No borrar ni reescribir el legacy hasta completar y verificar la migración.
+- Canónico: `cabaniasriocuarto/Dr.Cannabis`
+- Legacy funcional/read-only: `cabaniasriocuarto/Dr.-Cannabis`
+
+No borrar ni reescribir el legacy hasta completar y verificar cada migración.
+
+## Plataformas objetivo
+
+### Windows
+
+- Electron;
+- React + TypeScript compartidos;
+- SQLite local;
+- instalador NSIS;
+- provider LLM local desacoplado;
+- usuario final sin Node/VS Code.
+
+### Android
+
+- misma UI/logic React + TypeScript;
+- Capacitor;
+- Kotlin solo como puente nativo;
+- Google LiteRT-LM + modelo Gemma seleccionado por benchmark;
+- sin API paga/key/PC/Wi-Fi local;
+- offline después de instalar assets;
+- distribución Google Play.
+
+## UX móvil canónica
+
+- split principal fijo 50/50;
+- portrait: visor arriba, chat abajo;
+- landscape/tablet: visor izquierda, chat derecha;
+- dentro del chat: historial buscable arriba y conversación abajo;
+- visor con zoom/pan/pinch para imágenes, tablas, gráficos y artifacts;
+- chat nunca cubre el visor.
+
+## Operación GitHub
+
+- Master: #14.
+- Parent/child Issues según WBS.
+- Formularios en `.github/ISSUE_TEMPLATE/`.
+- Toda PR usa `.github/PULL_REQUEST_TEMPLATE.md` y nace Draft.
+- Trackers #46–#51 preservan M0–M5 mientras no existan Milestones nativas gestionables.
+- No usar blank Issues para saltar contratos; seguir `GITHUB_OPERATING_MODEL.md`.
 
 ## Método de entrega
-El proyecto se completa por bloques/Issues, no con una reescritura gigante.
-Cada bloque tiene scope explícito, pruebas, documentación y Draft PR independiente.
+
+El proyecto se completa por parents/child Issues, branches y Draft PRs pequeñas. La Issue maestra es #14; el WBS y los trackers preservan el plan completo.
 
 ## Regla de oro
-La calculadora profesional PPM/EC → gramos de sales es el núcleo. Toolboxes, inventario, historial y chatbot se integran alrededor del mismo modelo de datos y nunca deben duplicar lógica de negocio.
+
+La calculadora profesional PPM/EC → gramos de sales es el núcleo. UI, Android, toolboxes, inventario, historial y chatbot reutilizan el mismo dominio y nunca duplican fórmulas.

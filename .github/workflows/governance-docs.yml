@@ -1,0 +1,131 @@
+name: Governance docs checks
+
+on:
+  pull_request:
+    paths:
+      - "AGENTS.md"
+      - ".github/**"
+      - "docs/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: governance-docs-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Validate governance and documentation
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch pull request base
+        if: github.event_name == 'pull_request'
+        run: git fetch origin "${{ github.base_ref }}" --depth=1
+
+      - name: Check diff whitespace and conflict markers
+        if: github.event_name == 'pull_request'
+        run: git diff --check "origin/${{ github.base_ref }}...HEAD"
+
+      - name: Validate issue form YAML and required structure
+        shell: ruby {0}
+        run: |
+          require "yaml"
+
+          forms = Dir[".github/ISSUE_TEMPLATE/*.{yml,yaml}"].reject { |path| path.end_with?("config.yml", "config.yaml") }
+          abort "No structured issue forms found" if forms.empty?
+
+          forms.each do |path|
+            data = YAML.load_file(path)
+            abort "#{path}: root must be a mapping" unless data.is_a?(Hash)
+
+            %w[name description body].each do |key|
+              value = data[key]
+              abort "#{path}: missing #{key}" if value.nil? || (value.respond_to?(:empty?) && value.empty?)
+            end
+
+            abort "#{path}: body must be an array" unless data["body"].is_a?(Array)
+
+            ids = data["body"].filter_map do |entry|
+              next unless entry.is_a?(Hash)
+              entry["id"]
+            end
+
+            duplicates = ids.group_by(&:itself).select { |_id, values| values.length > 1 }.keys
+            abort "#{path}: duplicate ids #{duplicates.join(', ')}" unless duplicates.empty?
+
+            puts "OK #{path}"
+          end
+
+          config = ".github/ISSUE_TEMPLATE/config.yml"
+          YAML.load_file(config)
+          puts "OK #{config}"
+
+      - name: Validate required governance files
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          required_files=(
+            "AGENTS.md"
+            ".github/PULL_REQUEST_TEMPLATE.md"
+            ".github/ISSUE_TEMPLATE/child-task.yml"
+            ".github/ISSUE_TEMPLATE/bug.yml"
+            ".github/ISSUE_TEMPLATE/release-gate.yml"
+            ".github/ISSUE_TEMPLATE/config.yml"
+            "docs/START_HERE.md"
+            "docs/architecture/CROSS_PLATFORM_ARCHITECTURE.md"
+            "docs/architecture/ANDROID_ON_DEVICE_AI.md"
+            "docs/product/PRODUCT_SPEC.md"
+            "docs/product/PROJECT_SOURCE_PROMPT.md"
+            "docs/product/MOBILE_SPLIT_WORKSPACE_SPEC.md"
+            "docs/truth/SOURCE_OF_TRUTH.md"
+            "docs/truth/FEATURE_MAP.md"
+            "docs/truth/NEXT_STEPS.md"
+            "docs/truth/WORK_BREAKDOWN_STRUCTURE.md"
+            "docs/truth/GITHUB_OPERATING_MODEL.md"
+            "docs/truth/MILESTONE_PLAN.md"
+            "docs/truth/TRACEABILITY_MATRIX.md"
+            "docs/truth/DEVELOPMENT_WORKFLOW.md"
+            "docs/truth/TESTING_MATRIX.md"
+            "docs/truth/NUTRIENT_CALCULATION_CONTRACT.md"
+            "docs/truth/AI_KNOWLEDGE_CONTRACT.md"
+            "docs/truth/DECISION_LOG.md"
+          )
+
+          missing=0
+          for file in "${required_files[@]}"; do
+            if [[ ! -f "$file" ]]; then
+              echo "Missing required file: $file" >&2
+              missing=1
+            fi
+          done
+
+          exit "$missing"
+
+      - name: Reject unresolved merge conflict markers
+        shell: bash
+        run: |
+          set -euo pipefail
+          if grep -RInE '^(<<<<<<<|=======|>>>>>>>)' AGENTS.md .github docs; then
+            echo "Unresolved merge conflict marker found" >&2
+            exit 1
+          fi
+
+      - name: Summary
+        run: |
+          {
+            echo "## Governance docs validation"
+            echo "- git diff --check: PASS (pull requests)"
+            echo "- issue form YAML/ids: PASS"
+            echo "- required governance files: PASS"
+            echo "- merge conflict markers: PASS"
+          } >> "$GITHUB_STEP_SUMMARY"

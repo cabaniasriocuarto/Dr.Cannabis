@@ -1,0 +1,124 @@
+name: Bug report
+
+description: Reportar una falla reproducible con versión, plataforma, evidencia y regression gate.
+title: "[BUG] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        No incluyas secrets, chats privados, bases de usuario ni datos personales sin anonimizar.
+        Un bug no autoriza refactors o features laterales.
+
+  - type: input
+    id: parent
+    attributes:
+      label: Parent/owner Issue
+      description: Bloque o child que posee la superficie, por ejemplo `#33 B10D`.
+      placeholder: "#N"
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Versión, commit o artifact hash
+      placeholder: "app version / commit SHA / APK-AAB-EXE hash"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Plataforma
+      options:
+        - Shared/domain
+        - Windows/Electron
+        - Android/Capacitor
+        - Cross-platform
+        - Documentation/data
+    validations:
+      required: true
+
+  - type: input
+    id: environment
+    attributes:
+      label: Entorno/dispositivo
+      description: OS, modelo de dispositivo, RAM/perfil o runtime relevante. No inventar si se desconoce.
+      placeholder: "Windows... / Android... / device..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: Resumen del problema
+      description: Qué falla y cuál es el impacto observable.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Pasos mínimos para reproducir
+      placeholder: |
+        1. ...
+        2. ...
+        3. ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Resultado esperado
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Resultado actual
+    validations:
+      required: true
+
+  - type: textarea
+    id: data
+    attributes:
+      label: Datos/fixtures usados
+      description: Indicá si son canonical, candidate, demo, test fixture o user data anonimizada.
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidencia
+      description: Logs redactados, captura, video, fixture, tool trace, network capture o hash del artifact.
+    validations:
+      required: true
+
+  - type: textarea
+    id: suspected
+    attributes:
+      label: Superficie o causa sospechada
+      description: Opcional. Diferenciar observación de inferencia.
+
+  - type: textarea
+    id: regression
+    attributes:
+      label: Regression test propuesto
+      description: Caso que debe fallar antes y pasar después. Si no es posible, justificar.
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Confirmaciones
+      options:
+        - label: Reproduje el problema o marqué claramente que no pude reproducirlo.
+          required: true
+        - label: La evidencia no contiene secrets ni datos privados sin anonimizar.
+          required: true
+        - label: No estoy usando un mock/demo como única evidencia de un fallo productivo.
+          required: true
