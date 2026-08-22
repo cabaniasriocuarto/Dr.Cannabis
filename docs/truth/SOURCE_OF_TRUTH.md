@@ -56,31 +56,63 @@ Tres zonas:
 
 ## 4. UX Android
 
-### Portrait
+El chat no usa pantalla completa. Tiene dos estados canónicos.
+
+### `EXPANDED_SPLIT`
+
+Portrait:
 
 - visor/workspace superior: 50%;
 - chat inferior: 50%.
 
-### Landscape/tablet
+Landscape/tablet:
 
 - visor izquierdo: 50%;
 - chat derecho: 50%.
 
-Dentro del chat:
+Dentro del chat expandido:
 
 - historial buscable/interactivo arriba;
 - conversación activa abajo;
 - default 30/70, historial ajustable entre 25–45%;
-- el split principal permanece 50/50.
+- el split expandido permanece 50/50.
+
+### `MINIMIZED_BUBBLE`
+
+- el panel de chat deja de ocupar su mitad;
+- el visor/módulo activo utiliza todo el espacio útil;
+- queda una burbuja pequeña fija abajo a la izquierda;
+- la burbuja no es arrastrable en MVP;
+- tocarla restaura exactamente el split expandido.
+
+La minimización/restauración conserva:
+
+- thread e historial;
+- borrador y mensajes;
+- generación activa/parcial/completada;
+- artifact activo;
+- zoom, pan, scroll, filtros y orden;
+- módulo, cultivo, sector y campaña.
+
+Minimizar no cancela ni pausa silenciosamente una generación. La burbuja puede indicar actividad, respuesta nueva o error sin exponer contenido sensible.
+
+Burbuja:
+
+- esquina inferior izquierda dentro de safe areas;
+- 44–48 dp visuales;
+- hit target mínimo 48 × 48 dp;
+- no tapa navegación ni controles críticos;
+- TalkBack, teclado y reduced motion obligatorios.
 
 Visor:
 
 - imágenes, tablas, gráficos, resultados, artifacts y citas;
 - pinch-to-zoom, pan, double-tap, reset/fit;
 - tablas con scroll bidireccional, headers sticky y virtualización cuando aplique;
-- estado persistente por thread/artifact.
+- estado persistente por thread/artifact;
+- ocupa todo el espacio útil cuando el chat está minimizado.
 
-El chat no ocupa toda la pantalla ni cubre el visor durante uso normal.
+Issues: #30 y #53. Requirements: R-015, R-030, R-031 y R-032.
 
 ## 5. Módulos
 
@@ -178,7 +210,8 @@ Componentes:
 - RAG con citations;
 - tool calling determinista;
 - providers locales desktop/Android;
-- orchestration con streaming/cancelación/errores.
+- orchestration con streaming/cancelación/errores;
+- presentación expandida/minimizada desacoplada del estado conversacional.
 
 Reglas:
 
@@ -190,7 +223,8 @@ Reglas:
 - ES/EN/PT-BR;
 - sin consejo médico/consumo ni asesoría legal definitiva;
 - sin fallback cloud oculto;
-- datos/chat locales por defecto.
+- datos/chat locales por defecto;
+- minimizar la UI no cancela ni altera el turno.
 
 ## 11. IA Android
 
@@ -220,6 +254,8 @@ No se declara compatibilidad concreta hasta benchmark/dispositivos reales.
 - no UI Android duplicada en Kotlin;
 - no fórmulas en UI/Kotlin/LLM;
 - no cloud oculto;
+- no chat móvil full-screen;
+- no pérdida de estado al minimizar/restaurar;
 - tests para fórmulas, migraciones, contracts, UI, providers y releases;
 - docs/truth sincronizadas.
 
@@ -230,7 +266,7 @@ No se declara compatibilidad concreta hasta benchmark/dispositivos reales.
 - WBS: `docs/truth/WORK_BREAKDOWN_STRUCTURE.md`.
 - Milestones: `docs/truth/MILESTONE_PLAN.md`, trackers #46–#51.
 - Traceability: `docs/truth/TRACEABILITY_MATRIX.md`.
-- Child issues B5/B9/B10/B11/B12: #17–#45.
+- Child issues principales: #17–#45 y #53.
 
 ## 14. Definición de terminado
 
@@ -241,7 +277,10 @@ Dr. Cannabis es entregable cuando:
 - módulos operativos en las plataformas declaradas;
 - equivalencia cross-platform;
 - bot grounded, offline y trilingüe;
-- UX móvil split/visor/historial PASS;
+- chat expandido 50/50 PASS;
+- minimización a burbuja inferior izquierda y restauración exacta PASS;
+- generación activa minimizada/safe areas/accesibilidad PASS;
+- visor/historial PASS;
 - providers/modelos aprobados por benchmark;
 - instaladores/AAB exactos probados;
 - install/upgrade/rollback/offline PASS;
