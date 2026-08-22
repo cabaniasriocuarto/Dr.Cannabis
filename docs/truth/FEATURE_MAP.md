@@ -104,6 +104,7 @@ La existencia de un contrato, Issue o scaffolding no equivale a implementación 
 | Tool calling | conceptual | #23 | TODO | accuracy/authorization PASS |
 | Historial/search | parcial/no canónico | #24 | TODO | local FTS/CRUD/migrations |
 | Orquestador/streaming | no aceptado | #29 | TODO | state machine/cancel/retry |
+| Streaming minimizado | no aceptado | #29/#32/#53 | TODO | continue/restore/no-loss PASS |
 | ES/EN/PT-BR | requisito | #27/#36 | TODO | multilingual PASS |
 | Abstención/no hallucination | contrato | #22/#27 | TODO | eval threshold PASS |
 | Desktop provider local | no aceptado | #28 | TODO | offline benchmark |
@@ -117,20 +118,27 @@ La existencia de un contrato, Issue o scaffolding no equivale a implementación 
 
 | Área | Contrato/Issue | Estado actual | Objetivo/Gate |
 | --- | --- | --- | --- |
-| Split portrait 50/50 | mobile spec/#30 | PROPOSED | geometry tests |
-| Split landscape 50/50 | mobile spec/#30 | PROPOSED | device screenshots/tests |
-| Chat full-screen default | prohibited | PROPOSED | regression test |
+| Estado `expanded_split` portrait | mobile spec/#30 | PROPOSED | visor 50% + chat 50% |
+| Estado `expanded_split` landscape/tablet | mobile spec/#30 | PROPOSED | visor 50% + chat 50% |
+| Estado `minimized_bubble` | mobile spec/#53 | PROPOSED | panel oculto + burbuja inferior izquierda |
+| Visor full workspace al minimizar | #30/#53 | PROPOSED | 100% área útil sin reset |
+| Botón minimizar/restaurar | #53 | PROPOSED | state-machine PASS |
+| Burbuja safe-area/hit-target | #35/#53 | PROPOSED | device/accessibility PASS |
+| Burbuja no arrastrable MVP | #53 | PROPOSED | interaction regression |
+| Chat full-screen | prohibido | PROPOSED | regression PASS |
+| Restore exacto de estado | #20/#53 | PROPOSED | thread/draft/artifact/zoom/scroll PASS |
+| Generación activa minimizada | #29/#32/#53 | PROPOSED | no cancel/no loss/no sensitive preview |
 | History above conversation | #31/#32 | PROPOSED | order/interaction PASS |
 | Internal default 30/70 | #31 | PROPOSED | default/bounds/persist |
 | Thread search/actions | #24/#31 | TODO | 1,000-thread fixture |
 | Viewer artifacts | #33 | TODO | exact artifact focus |
 | Pinch/pan/double-tap | #33 | TODO | gesture/device PASS |
 | Large tables | #33 | TODO | bidirectional/virtualized |
-| Keyboard/safe areas | #30/#32/#35 | TODO | IME/device PASS |
-| Orientation/background state | #20/#30/#33 | TODO | lifecycle PASS |
-| Accessibility | #35 | TODO | TalkBack/focus/touch PASS |
-| Mobile performance | #27/#35 | TODO | budgets/device matrix |
-| Visual i18n | #36 | TODO | ES/EN/PT-BR/pseudo-locale |
+| Keyboard/safe areas | #30/#32/#35/#53 | TODO | IME/device PASS |
+| Orientation/background state | #20/#30/#33/#53 | TODO | lifecycle PASS |
+| Accessibility | #35/#53 | TODO | TalkBack/focus/touch PASS |
+| Mobile performance | #27/#35/#53 | TODO | budgets/device matrix |
+| Visual i18n | #36/#53 | TODO | ES/EN/PT-BR/pseudo-locale |
 
 ## Distribución y release
 
@@ -141,7 +149,7 @@ La existencia de un contrato, Issue o scaffolding no equivale a implementación 
 | Privacy/data safety | #41 | TODO | reviewed store declarations |
 | Licenses/SBOM | #37–#41 | TODO | release artifacts complete |
 | RC Desktop | #42 | TODO | exact hash report |
-| RC Android | #43 | TODO | exact AAB/device matrix |
+| RC Android | #43 | TODO | exact AAB/device matrix incl. minimize/restore |
 | Cross-platform equivalence | #44 | TODO | same fixture/schemas |
 | Final acceptance | #45 | TODO | human approvals/publication gate |
 
