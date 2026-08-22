@@ -22,7 +22,7 @@ MASTER #14
   ├─ B7 #8
   ├─ B8 #9
   ├─ B9 #10 -> #21–#29
-  ├─ B10 #11 -> #30–#36
+  ├─ B10 #11 -> #30–#36, #53
   ├─ B11 #12 -> #37–#41
   └─ B12 #13 -> #42–#45
 ```
@@ -93,9 +93,9 @@ Salida:
 
 - arquitectura compartida;
 - Android Google on-device AI;
-- UX split 50/50;
+- UX móvil con chat expandido 50/50 y minimizado como burbuja;
 - WBS/traceability/milestones;
-- backlog #17–#51.
+- backlog #17–#53 aplicable.
 
 No toca código de producto.
 
@@ -220,20 +220,39 @@ Notas:
 Orden recomendado:
 
 1. #34 componentes/tokens compartidos;
-2. #30 split layout;
+2. #30 split expandido 50/50 y base de state machine;
 3. #31 historial;
 4. #32 conversación;
 5. #33 visor;
-6. #35 accessibility/performance;
-7. #36 i18n/visual regression;
-8. parent gate.
+6. #53 minimizar/restaurar a burbuja con continuidad completa;
+7. #35 accessibility/performance;
+8. #36 i18n/visual regression;
+9. parent gate.
 
 Dependencias cruzadas:
 
 - #31 depende de #24;
 - #32 depende de #29;
 - #33 depende de artifacts/citations/tools #21/#23/#29;
-- #35 requiere provider real #25 para medir carga conjunta.
+- #53 depende de #20/#29/#30/#31/#32/#33/#35;
+- #35 requiere provider real #25 para medir carga conjunta;
+- #36 incluye estados expandido/minimizado/restaurando.
+
+Contrato UX de B10:
+
+```text
+EXPANDED_SPLIT
+  portrait: visor 50% + chat 50%
+  landscape/tablet: visor 50% + chat 50%
+  chat: historial arriba + conversación abajo
+
+MINIMIZED_BUBBLE
+  visor/módulo: 100% del área útil
+  chat: burbuja pequeña fija abajo a la izquierda
+  restauración: mismo thread, borrador, artifact, zoom y scroll
+```
+
+No existe estado full-screen. Minimizar no cancela silenciosamente una generación.
 
 ### M4 — Distribution & Stores (#50)
 
@@ -263,6 +282,15 @@ Orden:
 
 #45 solo cierra después de #42–#44 PASS.
 
+El RC Android debe probar:
+
+- chat expandido;
+- chat minimizado como burbuja inferior izquierda;
+- restauración sin pérdida;
+- generación activa minimizada;
+- safe areas y controles críticos;
+- ausencia de chat full-screen.
+
 ## 7. Reglas para child issues
 
 Cada child issue debe incluir:
@@ -288,12 +316,13 @@ feat/b3-...
 feat/b5a-...
 feat/b9e-...
 ux/b10a-...
+ux/b10h-chat-bubble...
 release/b11b-...
 rc/b12b-...
 docs/gov-...
 ```
 
-Una child issue coherente por branch/PR. No agrupar #25, #30 y #39 en una misma PR aunque pertenezcan al flujo Android.
+Una child issue coherente por branch/PR. No agrupar #25, #30, #39 y #53 en una misma PR aunque pertenezcan al flujo Android.
 
 ## 9. Gates por superficie
 
@@ -336,7 +365,8 @@ Una child issue coherente por branch/PR. No agrupar #25, #30 y #39 en una misma 
 - abstention;
 - multilingual;
 - latency/resources;
-- model/runtime manifest.
+- model/runtime manifest;
+- streaming y cancelación con chat expandido/minimizado.
 
 ### UX
 
@@ -344,7 +374,11 @@ Una child issue coherente por branch/PR. No agrupar #25, #30 y #39 en una misma 
 - visual matrix;
 - touch/accessibility;
 - state continuity;
-- large data/performance.
+- large data/performance;
+- state machine `expanded_split ↔ minimized_bubble`;
+- bubble safe-area/hit-target/z-index;
+- restoration de thread/visor;
+- no chat full-screen.
 
 ## 10. Cambios de alcance
 
