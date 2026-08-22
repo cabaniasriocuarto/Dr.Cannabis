@@ -9,23 +9,26 @@ Este repositorio es el canónico para convertir Dr. Cannabis en una aplicación 
 Leer en este orden:
 
 1. `AGENTS.md`
-2. `docs/truth/SOURCE_OF_TRUTH.md`
-3. `docs/product/PRODUCT_SPEC.md`
-4. `docs/truth/FEATURE_MAP.md`
-5. `docs/truth/NEXT_STEPS.md`
-6. `docs/truth/WORK_BREAKDOWN_STRUCTURE.md`
-7. `docs/truth/GITHUB_OPERATING_MODEL.md`
-8. `docs/truth/MILESTONE_PLAN.md`
-9. `docs/truth/TRACEABILITY_MATRIX.md`
-10. `docs/truth/DEVELOPMENT_WORKFLOW.md`
-11. `docs/truth/TESTING_MATRIX.md`
-12. `docs/truth/DECISION_LOG.md`
-13. `docs/architecture/CROSS_PLATFORM_ARCHITECTURE.md` si se toca estructura/UI/plataforma
-14. `docs/architecture/ANDROID_ON_DEVICE_AI.md` si se toca IA Android/modelos/assets
-15. `docs/product/MOBILE_SPLIT_WORKSPACE_SPEC.md` si se toca UX móvil/chat/visor
-16. `docs/truth/NUTRIENT_CALCULATION_CONTRACT.md` si se toca solver/PPM/EC/pH
-17. `docs/truth/AI_KNOWLEDGE_CONTRACT.md` si se toca chatbot/RAG/tools
-18. `docs/reference/LEGACY_MIGRATION_MAP.md` cuando se porte código/datos legacy
+2. `docs/truth/CURRENT_STATUS.md`
+3. `docs/truth/SOURCE_OF_TRUTH.md`
+4. `docs/product/PRODUCT_SPEC.md`
+5. `docs/truth/FEATURE_MAP.md`
+6. `docs/truth/NEXT_STEPS.md`
+7. `docs/truth/WORK_BREAKDOWN_STRUCTURE.md`
+8. `docs/truth/GITHUB_OPERATING_MODEL.md`
+9. `docs/truth/MILESTONE_PLAN.md`
+10. `docs/truth/TRACEABILITY_MATRIX.md`
+11. `docs/truth/DEVELOPMENT_WORKFLOW.md`
+12. `docs/truth/TESTING_MATRIX.md`
+13. `docs/truth/DECISION_LOG.md`
+14. `docs/architecture/CROSS_PLATFORM_ARCHITECTURE.md` si se toca estructura/UI/plataforma
+15. `docs/architecture/ANDROID_ON_DEVICE_AI.md` si se toca IA Android/modelos/assets
+16. `docs/product/MOBILE_SPLIT_WORKSPACE_SPEC.md` si se toca UX móvil/chat/visor
+17. `docs/truth/NUTRIENT_CALCULATION_CONTRACT.md` si se toca solver/PPM/EC/pH
+18. `docs/truth/AI_KNOWLEDGE_CONTRACT.md` si se toca chatbot/RAG/tools
+19. `docs/reference/LEGACY_MIGRATION_MAP.md` cuando se porte código/datos legacy
+
+`CURRENT_STATUS.md` manda para determinar qué bloque está vigente y qué marcadores temporales pre-merge quedaron supersedidos. No reemplaza los contratos técnicos de los demás documentos.
 
 ## Repositorios relacionados
 
@@ -47,7 +50,7 @@ No borrar ni reescribir el legacy hasta completar y verificar cada migración.
 
 ### Android
 
-- misma UI/logic React + TypeScript;
+- misma UI/lógica React + TypeScript;
 - Capacitor;
 - Kotlin solo como puente nativo;
 - Google LiteRT-LM + modelo Gemma seleccionado por benchmark;
@@ -57,16 +60,28 @@ No borrar ni reescribir el legacy hasta completar y verificar cada migración.
 
 ## UX móvil canónica
 
+El chat tiene dos estados y nunca usa pantalla completa:
+
+### Expandido
+
 - split principal fijo 50/50;
 - portrait: visor arriba, chat abajo;
 - landscape/tablet: visor izquierda, chat derecha;
 - dentro del chat: historial buscable arriba y conversación abajo;
 - visor con zoom/pan/pinch para imágenes, tablas, gráficos y artifacts;
-- chat nunca cubre el visor.
+- ningún panel cubre al otro.
+
+### Minimizado
+
+- el visor o módulo activo usa todo el espacio útil;
+- queda una burbuja pequeña fija abajo a la izquierda;
+- tocarla restaura el mismo thread, borrador, mensajes, generación, artifact, zoom, pan y scroll;
+- minimizar no cancela silenciosamente una respuesta.
 
 ## Operación GitHub
 
 - Master: #14.
+- Estado vigente: `docs/truth/CURRENT_STATUS.md`.
 - Parent/child Issues según WBS.
 - Formularios en `.github/ISSUE_TEMPLATE/`.
 - Toda PR usa `.github/PULL_REQUEST_TEMPLATE.md` y nace Draft.
