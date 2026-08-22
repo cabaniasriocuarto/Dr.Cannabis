@@ -90,11 +90,12 @@ La versión final debe modelar como datos, no hard-codear en UI:
 - costo/stock/lote.
 
 ## 8. Bot Dr. Cannabis
-Debe usar:
-1. prompt maestro;
-2. base de conocimiento local versionada;
-3. contexto JSON explícito de la app;
-4. datos locales de cultivo/receta/lecturas.
+Debe consultar sus fuentes en este orden de autoridad:
+1. contexto JSON actual de la app;
+2. datos locales SQLite/dataset canónico;
+3. Prompt Maestro versionado;
+4. base de conocimiento local versionada;
+5. rangos genéricos solo como fallback explícitamente identificado.
 
 Reglas permanentes:
 - datos de la app primero;
