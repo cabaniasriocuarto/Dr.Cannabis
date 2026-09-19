@@ -30,6 +30,20 @@ Leer en este orden:
 
 `CURRENT_STATUS.md` manda para determinar qué bloque está vigente y qué marcadores temporales pre-merge quedaron supersedidos. No reemplaza los contratos técnicos de los demás documentos.
 
+### Ampliación GOV-03: recuperación, Harness y visión
+
+Leer [PROJECT_EXECUTION_MAP](truth/PROJECT_EXECUTION_MAP.md) para ubicar la tarea en los bloques existentes y las Issues #56–#66. No crear otro roadmap paralelo.
+
+Lecturas dirigidas:
+
+- scope guard, staged recheck y revisión: [HARNESS_ADOPTION](truth/HARNESS_ADOPTION.md);
+- fotos/cámara/video/RAG e incertidumbre: [LOCAL_VISION_PIPELINE](architecture/LOCAL_VISION_PIPELINE.md);
+- fuentes internas, informe local e investigación externa: [SOURCE_REVIEW](reference/SOURCE_REVIEW_2026-09-18.md);
+- prueba de instalación: [GOOGLE_LOCAL_VISION_SETUP](runbooks/GOOGLE_LOCAL_VISION_SETUP.md);
+- mandato local aislado #59: [AI_SPIKE_01_CODEX](tasks/AI_SPIKE_01_CODEX.md).
+
+Los nuevos contratos se adoptan al merge humano de la PR de #56. Tenerlos en una branch o una Issue no demuestra implementación. El scope guard ejecutable pertenece a #58; la prueba real de modelo a #59; precisión visual a #65. No atribuir un PASS a esas superficies por CI documental.
+
 ## Repositorios relacionados
 
 - Canónico: `cabaniasriocuarto/Dr.Cannabis`
