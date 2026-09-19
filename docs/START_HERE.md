@@ -95,3 +95,15 @@ El proyecto se completa por parents/child Issues, branches y Draft PRs pequeñas
 ## Regla de oro
 
 La calculadora profesional PPM/EC → gramos de sales es el núcleo. UI, Android, toolboxes, inventario, historial y chatbot reutilizan el mismo dominio y nunca duplican fórmulas.
+
+## Contribuciones de fotos — ampliación DATA-LOOP / GOV-04
+
+Parent #68, children #69–#77. Antes de tocar consentimiento, transferencia de fotos, recepción administrativa, cuotas, autoetiquetado, derechos o entrenamiento por contribuciones leer:
+
+- [Contrato de recepción y aprendizaje](architecture/CONTRIBUTION_LEARNING_LOOP.md).
+- [Revisión jurídica preliminar](legal/PHOTO_CONSENT_REVIEW.md).
+- [Plan ejecutable, dependencias y requisitos DL-](truth/CONTRIBUTION_WORK_PLAN.md).
+
+Esta ampliación es propuesta hasta merge humano de su PR y no activa ningún subsistema. `CURRENT_STATUS.md` conserva el estado de producto: B1 sigue activo. Corpus #60 y evaluación #65 se reutilizan, no se duplican. La PR #67 de GOV-03 tiene su propia revisión: al sincronizar conservar ambos bloques, nunca sobrescribir uno con el otro.
+
+No interpretar aceptar T&C o usar cámara como permiso genérico para entrenar. Modalidad final exige #69; el diseño propuesto pide una autorización específica en alta, recordada y modificable, sin pregunta por cada foto. Recepción de servidor inicialmente OFF, pausas/cupos efectivos server-side, sin backfill ni borrar originales. Análisis e historial locales continúan cuando se rechaza o pausa la contribución. Publicación de dataset requiere permiso/gate separados y permanece desactivada. CI documental no demuestra cumplimiento legal ni recepción implementada.
